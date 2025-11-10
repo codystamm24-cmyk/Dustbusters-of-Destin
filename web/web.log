@@ -1,0 +1,17 @@
+
+> dustbusters-web@0.1.0 dev
+> vite
+
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+
+  VITE v5.4.21  ready in 199 ms
+
+  ➜  Local:   http://localhost:3000/
+  ➜  Network: use --host to expose
+9:33:47 AM [vite] page reload index.html
+9:33:49 AM [vite] page reload index.html
+9:35:29 AM [vite] changed tsconfig file detected: /workspaces/Dustbusters-of-Destin/web/tsconfig.json - Clearing cache and forcing full-reload to ensure TypeScript is compiled with updated config values.
+9:35:30 AM [vite] changed tsconfig file detected: /workspaces/Dustbusters-of-Destin/web/tsconfig.json - Clearing cache and forcing full-reload to ensure TypeScript is compiled with updated config values.
+9:35:33 AM [vite] changed tsconfig file detected: /workspaces/Dustbusters-of-Destin/web/tsconfig.json - Clearing cache and forcing full-reload to ensure TypeScript is compiled with updated config values.
+9:35:35 AM [vite] changed tsconfig file detected: /workspaces/Dustbusters-of-Destin/web/tsconfig.json - Clearing cache and forcing full-reload to ensure TypeScript is compiled with updated config values.
+9:35:37 AM [vite] changed tsconfig file detected: /workspaces/Dustbusters-of-Destin/web/tsconfig.json - Clearing cache and forcing full-reload to ensure TypeScript is compiled with updated config values.
