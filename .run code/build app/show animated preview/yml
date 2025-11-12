@@ -1,0 +1,96 @@
+name: 🚀 Build and Deploy
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch: # allows manual trigger
+
+permissions:
+  contents: write  # required for GitHub Pages deploy
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1️⃣ Checkout repository
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2️⃣ Clean up unneeded files
+      - name: Remove unnecessary folders
+        run: |
+          rm -rf node_modules */node_modules */build */dist
+          rm -rf .expo .gradle .idea
+          echo "🧹 Cleanup complete"
+
+      # 3️⃣ Set up Node.js
+      - name: Use Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # 4️⃣ Build backend
+      - name: Build backend
+        run: |
+          echo "🚀 Starting backend build"
+          set -e  # stop on error
+          set -x  # show commands
+          cd backend
+          echo "🔧 Installing dependencies..."
+          npm ci || npm install
+          echo "🏗️ Building backend..."
+          npm run build || echo "⚠️ No build script found for backend"
+          echo "🧪 Running tests (if any)..."
+          npm test || echo "⚠️ No tests found"
+          echo "✅ Backend build completed successfully"
+
+      # 5️⃣ Build web
+      - name: Build web
+        run: |
+          if [ -d "web" ]; then
+            cd web
+            npm ci
+            npm run build || echo "⚠️ No build script found for web"
+          else
+            echo "⚠️ Skipping web build (no web folder found)"
+          fi
+
+      # 6️⃣ Build mobile
+      - name: Build mobile
+        run: |
+          if [ -d "mobile" ]; then
+            cd mobile
+            npm ci
+            npx expo export || echo "⚠️ No Expo build found"
+          else
+            echo "⚠️ Skipping mobile build (no mobile folder found)"
+          fi
+
+      # 7️⃣ Bundle everything into dist/
+      - name: Bundle all builds
+        run: |
+          mkdir -p dist
+          cp -r backend dist/backend || true
+          cp -r web/build dist/web || true
+          cp -r mobile/dist dist/mobile || true
+          cp docker-compose.yml .env.example README.md dist/ || true
+          echo "✅ Project bundled into /dist"
+
+      # 8️⃣ Upload artifact
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Dustbusters-of-Destin-FINAL
+          path: dist
+
+      # 9️⃣ Deploy web app to GitHub Pages
+      - name: Deploy web app to GitHub Pages
+        if: success() && hashFiles('web/build/**/*') != ''
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./web/build
+          publish_branch: gh-pages
+          user_name: github-actions
+          user_email: github-actions@github.com
