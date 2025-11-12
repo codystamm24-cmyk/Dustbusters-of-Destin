@@ -1,4 +1,4 @@
-name: 🚀 Build, Clean & Deploy Dustbusters of Destin
+name: 🚀 GitHub/workflows/build-and-deploy/yml
 
 on:
   push:
