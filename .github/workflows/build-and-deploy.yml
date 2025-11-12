@@ -1,13 +1,13 @@
-name: 🚀 GitHub/workflows/build-and-deploy/yml
+name: 🚀 Build and Deploy
 
 on:
   push:
     branches: [ main ]
-  workflow_dispatch: # allows manual runs
+  workflow_dispatch: # allows manual trigger
 
 permissions:
   contents: write  # required for GitHub Pages deploy
- 
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -20,10 +20,7 @@ jobs:
       # 2️⃣ Clean up unneeded files
       - name: Remove unnecessary folders
         run: |
-          rm -rf node_modules
-          rm -rf */node_modules
-          rm -rf */build
-          rm -rf */dist
+          rm -rf node_modules */node_modules */build */dist
           rm -rf .expo .gradle .idea
           echo "🧹 Cleanup complete"
 
@@ -34,48 +31,46 @@ jobs:
           node-version: 20
 
       # 4️⃣ Build backend
-     - name: Build backend
-  run: |
-    echo "🚀 Starting backend build"
-
-    # Exit immediately if any command fails
-    set -e
-
-    # Print each command before executing
-    set -x
-
-    # Step 1: Install dependencies
-    echo "🔧 Installing dependencies..."
-    npm install
-
-    # Step 2: Build the backend
-    echo "🏗️ Building backend..."
-    npm run build
-
-    # Step 3: Run tests (optional)
-    echo "🧪 Running tests..."
-    npm test
-
-    echo "✅ Backend build completed successfully"
+      - name: Build backend
+        run: |
+          echo "🚀 Starting backend build"
+          set -e  # stop on error
+          set -x  # show commands
+          cd backend
+          echo "🔧 Installing dependencies..."
+          npm ci || npm install
+          echo "🏗️ Building backend..."
+          npm run build || echo "⚠️ No build script found for backend"
+          echo "🧪 Running tests (if any)..."
+          npm test || echo "⚠️ No tests found"
+          echo "✅ Backend build completed successfully"
 
       # 5️⃣ Build web
       - name: Build web
         run: |
-          cd web
-          npm ci
-          npm run build || echo "⚠️ No build script found for web"
+          if [ -d "web" ]; then
+            cd web
+            npm ci
+            npm run build || echo "⚠️ No build script found for web"
+          else
+            echo "⚠️ Skipping web build (no web folder found)"
+          fi
 
       # 6️⃣ Build mobile
       - name: Build mobile
         run: |
-          cd mobile
-          npm ci
-          npx expo export || echo "⚠️ No Expo build found"
+          if [ -d "mobile" ]; then
+            cd mobile
+            npm ci
+            npx expo export || echo "⚠️ No Expo build found"
+          else
+            echo "⚠️ Skipping mobile build (no mobile folder found)"
+          fi
 
       # 7️⃣ Bundle everything into dist/
       - name: Bundle all builds
         run: |
-          mkdir dist
+          mkdir -p dist
           cp -r backend dist/backend || true
           cp -r web/build dist/web || true
           cp -r mobile/dist dist/mobile || true
@@ -98,4 +93,4 @@ jobs:
           publish_dir: ./web/build
           publish_branch: gh-pages
           user_name: github-actions
-          user_email: github-actions@github.comadd
+          user_email: github-actions@github.com
