@@ -37,6 +37,12 @@ jobs:
       - name: Build backend
         run: |
           cd backend
+- name: Build backend
+  run: |
+    set -x  # prints each command before running
+    npm install || exit 1
+    npm run build || exit 1
+    npm test || exit 1
           npm ci
           npm run build || echo "⚠️ No build script found for backend"
 
