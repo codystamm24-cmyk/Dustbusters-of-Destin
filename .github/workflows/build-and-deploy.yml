@@ -35,7 +35,14 @@ jobs:
 
       # 4️⃣ Build backend
      - name: Build backend
-  run: |
+  run: |- name: Build backend
+    # Print each command as it runs
+    set -x
+
+    # Run each command separately and fail immediately if it errors
+    npm install || { echo "❌ npm install failed"; exit 1; }
+    npm run build || { echo "❌ npm run build failed"; exit 1; }
+    npm test || { echo "❌ npm test failed"; exit 1; }
     set -x  # prints each command before running
     npm install || exit 1
     npm run build || exit 1
