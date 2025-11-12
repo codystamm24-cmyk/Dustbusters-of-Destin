@@ -30,13 +30,12 @@ jobs:
         with:
           node-version: 20
 
-      # 4️⃣ Build backend
-      - name: Build backend
-        run: |
-          echo "🚀 Starting backend build"
-          set -e  # stop on error
-          set -x  # show commands
-          cd backend
+      # 4️⃣ Build 
+          # - name: Build backend
+#   run: |
+#     cd backend
+#     npm install
+#     npm run build
           echo "🔧 Installing dependencies..."
           npm ci || npm install
           echo "🏗️ Building backend..."
