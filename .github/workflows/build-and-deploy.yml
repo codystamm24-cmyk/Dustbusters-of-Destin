@@ -35,36 +35,28 @@ jobs:
 
       # 4️⃣ Build backend
      - name: Build backend
-  run: |- name: Build backend
-    # Print each command as it runs
+  run: |
+    echo "🚀 Starting backend build"
+
+    # Exit immediately if any command fails
+    set -e
+
+    # Print each command before executing
     set -x
 
-    # Track failure status
-    FAILED=0
+    # Step 1: Install dependencies
+    echo "🔧 Installing dependencies..."
+    npm install
 
-    # Run commands individually, record failures
-    npm install || { echo "❌ npm install failed"; FAILED=1; }
-    npm run build || { echo "❌ npm run build failed"; FAILED=1; }
-    npm test || { echo "❌ npm test failed"; FAILED=1; }
+    # Step 2: Build the backend
+    echo "🏗️ Building backend..."
+    npm run build
 
-    # Exit with failure if any command failed
-    if [ $FAILED -eq 1 ]; then
-      echo "⚠️ One or more commands failed in Build backend"
-      exit 1
-    fi
-    # Run each command separately and fail immediately if it errors
-    npm install || { echo "❌ npm install failed"; exit 1; }
-    npm run build || { echo "❌ npm run build failed"; exit 1; }
-    npm test || { echo "❌ npm test failed"; exit 1; }
-    set -x  # prints each command before running
-    npm install || exit 1
-    npm run build || exit 1
-    npm test || exit 1
-          cd backend
-- name: Build backend
-  run:
-          npm ci
-          npm run build || echo "⚠️ No build script found for backend"
+    # Step 3: Run tests (optional)
+    echo "🧪 Running tests..."
+    npm test
+
+    echo "✅ Backend build completed successfully"
 
       # 5️⃣ Build web
       - name: Build web
