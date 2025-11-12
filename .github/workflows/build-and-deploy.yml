@@ -80,4 +80,4 @@ jobs:
           publish_dir: ./web/build
           publish_branch: gh-pages
           user_name: github-actions
-          user_email: github-actions@github.com
+          user_email: github-actions@github.comadd github action to clean and build
