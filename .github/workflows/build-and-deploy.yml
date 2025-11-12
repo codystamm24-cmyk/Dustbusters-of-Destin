@@ -39,10 +39,6 @@ jobs:
     # Print each command as it runs
     set -x
 
-- name: Build backend
-  run: |
-    set -x
-
     # Track failure status
     FAILED=0
 
