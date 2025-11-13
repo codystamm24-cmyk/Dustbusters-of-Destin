@@ -12,7 +12,7 @@ on:
     branches: [ main ]
   workflow_dispatch:
 
-name: 🚀 Build and Deploy
+name: 🚀 Build and Deployl
 jobs:
   build:
     runs-on: ubuntu-latest
