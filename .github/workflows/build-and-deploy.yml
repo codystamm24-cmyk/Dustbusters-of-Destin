@@ -40,18 +40,23 @@ jobs:
           node-version: 20
 
       # 4️⃣ Build 
-          # - name: Build backend
-#   run: |
-#     cd backend
-#     npm install
-#     npm run build
-          echo "🔧 Installing dependencies..."
-          npm ci || npm install
-          echo "🏗️ Building backend..."
-          npm run build || echo "⚠️ No build script found for backend"
-          echo "🧪 Running tests (if any)..."
-          npm test || echo "⚠️ No tests found"
-          echo "✅ Backend build completed successfully"
+          backend/
+ ┣ package.json
+ ┣ server.js
+ ┣ config/
+ ┃ ┗ db.js
+ ┣ models/
+ ┃ ┣ Job.js
+ ┃ ┣ Expense.js
+ ┃ ┗ User.js
+ ┣ routes/
+ ┃ ┣ jobs.js
+ ┃ ┣ expenses.js
+ ┃ ┗ users.js
+ ┗ controllers/
+    ┣ jobController.js
+    ┣ expenseController.js
+    ┗ userController.js
 
       # 5️⃣ Build web
       - name: Build web
