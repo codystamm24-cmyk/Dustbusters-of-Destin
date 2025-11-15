@@ -86,3 +86,5 @@ jobs:
           publish_branch: gh-pages
           user_name: github-actions
           user_email: github-actions@github.com
+- name: Install dependencies
+  run: npm install
