@@ -1,0 +1,16 @@
+/backend/frontend
+ ├─ package.json
+ ├─ README.md
+ ├─ .gitignore
+ ├─ public/
+ │   └─ index.html
+ └─ src/
+    ├─ index.js
+    ├─ App.js
+    ├─ styles.css
+    └─ components/
+       ├─ Navbar.js
+       ├─ BookingForm.js
+       ├─ CustomerForm.js
+       ├─ EmployeeLogin.js
+       └─ AdminDashboard.js
