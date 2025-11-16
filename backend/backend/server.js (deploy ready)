@@ -25,3 +25,23 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () =>
   console.log(`🚀 Server running on port ${PORT}`)
 );
+const express = require('express');
+const path = require('path');
+
+const app = express();
+
+// Middleware for JSON
+app.use(express.json());
+
+// Serve API routes here
+// Example:
+// app.use('/api/bookings', bookingsRouter);
+
+// Serve React frontend
+const buildPath = path.join(__dirname, 'frontend', 'build');
+app.use(express.static(buildPath));
+
+// For all other routes, serve index.html (React handles routing)
+app.get('*', (req, res) => {
+  res.sendFile(path.join(buildPath, 'index.html'));
+});
