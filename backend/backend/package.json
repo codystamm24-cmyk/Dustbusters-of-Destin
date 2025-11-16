@@ -1,4 +1,6 @@
-{
+{"scripts": {
+  "start": "node app.js"
+}
   "name": "dustbusters-backend",
   "version": "1.0.0",
   "main": "server.js",
@@ -15,4 +17,6 @@
   "devDependencies": {
     "nodemon": "^3.1.0"
   }
+}"scripts": {
+  "start": "node app.js"
 }
