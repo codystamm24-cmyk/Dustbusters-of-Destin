@@ -1,0 +1,67 @@
+const sqlite3 = require("sqlite3").verbose();
+const db = new sqlite3.Database("./database.db");
+
+db.serialize(() => {
+  db.run(`
+    CREATE TABLE IF NOT EXISTS users (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT,
+      email TEXT UNIQUE,
+      password TEXT,
+      is_worker INTEGER DEFAULT 0,
+      created_at TEXT DEFAULT CURRENT_TIMESTAMP
+    )
+  `);
+
+  db.run(`
+    CREATE TABLE IF NOT EXISTS workers (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      user_id INTEGER,
+      skills TEXT,
+      background_status TEXT DEFAULT 'pending',
+      stripe_account TEXT,
+      FOREIGN KEY(user_id) REFERENCES users(id)
+    )
+  `);
+
+  db.run(`
+    CREATE TABLE IF NOT EXISTS jobs (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      user_id INTEGER,
+      description TEXT,
+      price REAL,
+      lat REAL,
+      lng REAL,
+      status TEXT DEFAULT 'open',
+      created_at TEXT DEFAULT CURRENT_TIMESTAMP
+    )
+  `);
+
+  db.run(`
+    CREATE TABLE IF NOT EXISTS bookings (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      job_id INTEGER,
+      worker_id INTEGER,
+      scheduled_time TEXT,
+      status TEXT DEFAULT 'pending',
+      cancel_fee REAL DEFAULT 0,
+      FOREIGN KEY(job_id) REFERENCES jobs(id),
+      FOREIGN KEY(worker_id) REFERENCES workers(id)
+    )
+  `);
+
+  db.run(`
+    CREATE TABLE IF NOT EXISTS payments (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      job_id INTEGER,
+      amount REAL,
+      user_id INTEGER,
+      worker_id INTEGER,
+      status TEXT,
+      stripe_payment TEXT,
+      created_at TEXT DEFAULT CURRENT_TIMESTAMP
+    )
+  `);
+});
+
+module.exports = db;
