@@ -4,7 +4,13 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import path from "path";
 import { fileURLToPath } from "url";
-
+import authRoutes from "./routes/auth.js";
+import jobsRoutes from "./routes/jobs.js";
+import bookingsRoutes from "./routes/bookings.js";
+import workersRoutes from "./routes/workers.js";
+import paymentsRoutes from "./routes/payments.js";
+import backgroundRoutes from "./routes/background.js";
+import adminRoutes from "./routes/admin.js";
 dotenv.config();
 
 // Fix for __dirname in ES modules
