@@ -68,7 +68,9 @@ app.use(express.static(buildPath));
 app.get("*", (req, res) => {
   res.sendFile(path.join(buildPath, "index.html"));
 });
+import errorHandler from "./middleware/errorHandler.js";
 
+app.use(errorHandler);
 // =======================
 // START SERVER
 // =======================
