@@ -1,26 +1,78 @@
+// =======================
+// IMPORTS
+// =======================
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import path from "path";
+import { fileURLToPath } from "url";
 
-import customerRoutes from "./routes/customerRoutes.js";
-import employeeRoutes from "./routes/employeeRoutes.js";
-import bookingRoutes from "./routes/bookingRoutes.js";
+// Route imports
+import authRoutes from "./routes/auth.js";
+import jobsRoutes from "./routes/jobs.js";
+import bookingsRoutes from "./routes/bookings.js";
+import workersRoutes from "./routes/workers.js";
+import paymentsRoutes from "./routes/payments.js";
+import backgroundRoutes from "./routes/background.js";
+import adminRoutes from "./routes/admin.js";
 
+// =======================
+// ENV CONFIG
+// =======================
 dotenv.config();
 
+// =======================
+// __dirname FIX FOR ES MODULES
+// =======================
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// =======================
+// APP INITIALIZATION
+// =======================
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.use("/api/customers", customerRoutes);
-app.use("/api/employees", employeeRoutes);
-app.use("/api/bookings", bookingRoutes);
+// =======================
+// ROUTES
+// =======================
+app.use("/api/auth", authRoutes);
+app.use("/api/jobs", jobsRoutes);
+app.use("/api/bookings", bookingsRoutes);
+app.use("/api/workers", workersRoutes);
+app.use("/api/payments", paymentsRoutes);
+app.use("/api/background", backgroundRoutes);
+app.use("/api/admin", adminRoutes);
 
+// Optional test route
+app.get("/api", (req, res) => {
+  res.json({ message: "Dustbusters API running" });
+});
+
+// =======================
+// MONGODB CONNECTION
+// =======================
 mongoose
   .connect(process.env.MONGO_URI)
-  .then(() => console.log("MongoDB connected"))
-  .catch((err) => console.error("MongoDB error:", err));
+  .then(() => console.log("✅ MongoDB connected"))
+  .catch((err) => console.error("❌ MongoDB error:", err));
 
+// =======================
+// SERVE REACT FRONTEND (OUTSIDE SERVER)
+// =======================
+const buildPath = path.join(__dirname, "..", "frontend", "build");
+app.use(express.static(buildPath));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(buildPath, "index.html"));
+});
+
+// =======================
+// START SERVER
+// =======================
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () =>
+  console.log(`🚀 Server running on port ${PORT}`)
+);
